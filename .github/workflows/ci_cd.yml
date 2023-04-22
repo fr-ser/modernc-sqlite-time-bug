@@ -73,6 +73,10 @@ jobs:
       - build-on-macos
 
     steps:
+      - name: set timezone
+        run: apt update && apt install tzdata -y
+      - name: check timezone
+        run: date && date -u
       - uses: actions/checkout@v3
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -85,7 +89,7 @@ jobs:
         with:
           name: linux-binaries
           path: ./dist_linux/
-      - name: fixe file permissions
+      - name: fix file permissions
         run: chmod +x ./dist_linux/*
       - name: Run the pre built code from linux
         run: ./dist_linux/main_linux_amd64
@@ -94,7 +98,7 @@ jobs:
         with:
           name: macos-binaries
           path: ./dist_macos/
-      - name: fixe file permissions
+      - name: fix file permissions
         run: chmod +x ./dist_macos/*
       - name: Run the pre built code from macos
         run: ./dist_macos/main_darwin_amd64
