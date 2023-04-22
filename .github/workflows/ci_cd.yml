@@ -35,16 +35,14 @@ jobs:
 
   docker-on-linux:
     runs-on: ubuntu-latest
-    container: golang:1.20.3-bullseye
+    container:
+      image: golang:1.20.3-bullseye
+      env:
+        TZ: "America/New_York"
     needs:
       - build-on-linux
 
     steps:
-      - uses: szenius/set-timezone@v1.2
-        with:
-          timezoneLinux: "Asia/Singapore"
-          timezoneMacos: "Asia/Singapore"
-          timezoneWindows: "Singapore Standard Time"
       - uses: actions/checkout@v3
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -91,16 +89,14 @@ jobs:
 
   docker-on-macos:
     runs-on: macos-latest
-    container: golang:1.20.3-bullseye
+    container:
+      image: golang:1.20.3-bullseye
+      env:
+        TZ: "America/New_York"
     needs:
       - build-on-macos
 
     steps:
-      - uses: szenius/set-timezone@v1.2
-        with:
-          timezoneLinux: "Asia/Singapore"
-          timezoneMacos: "Asia/Singapore"
-          timezoneWindows: "Singapore Standard Time"
       - uses: actions/checkout@v3
       - name: Set up Go
         uses: actions/setup-go@v4
