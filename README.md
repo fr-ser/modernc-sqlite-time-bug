@@ -8,6 +8,8 @@ The issue is about running the following query:
 select datetime('now','utc') as UTC, datetime('now','localtime') as LOCAL;
 ```
 
+The issue was raised here: <https://gitlab.com/cznic/sqlite/-/issues/141>
+
 ## Observations
 
 The code of this repo has been run via Github actions in Linux, MacOs and inside Docker (in Linux).
