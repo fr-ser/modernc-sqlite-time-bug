@@ -33,31 +33,6 @@ jobs:
       - name: Run built code
         run: ./dist/main_local
 
-  docker-on-linux:
-    runs-on: ubuntu-latest
-    container:
-      image: golang:1.20.3-bullseye
-      env:
-        TZ: "America/New_York"
-    needs:
-      - build-on-linux
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: "1.20"
-      - name: Run the code directly
-        run: go run main.go
-      - name: Download plugin backend
-        uses: actions/download-artifact@v3
-        with:
-          name: linux-binaries
-          path: ./dist/
-      - name: Run the pre built code
-        run: ./dist/main_linux_amd64
-
 
   build-on-macos:
     runs-on: macos-latest
@@ -87,13 +62,14 @@ jobs:
       - name: Run built code
         run: ./dist/main_local
 
-  docker-on-macos:
-    runs-on: macos-latest
+  docker-on-linux:
+    runs-on: ubuntu-latest
     container:
       image: golang:1.20.3-bullseye
       env:
         TZ: "America/New_York"
     needs:
+      - build-on-linux
       - build-on-macos
 
     steps:
@@ -104,12 +80,21 @@ jobs:
           go-version: "1.20"
       - name: Run the code directly
         run: go run main.go
-      - name: Download plugin backend
+      - name: Download the linux binaries
         uses: actions/download-artifact@v3
         with:
           name: linux-binaries
-          path: ./dist/
-      - name: Run the pre built code (darwin)
-        run: ./dist/main_darwin_amd64
-      - name: Run the pre built code (linux)
-        run: ./dist/main_linux_amd64
+          path: ./dist_linux/
+      - name: fixe file permissions
+        run: chmod +x ./dist_linux/*
+      - name: Run the pre built code from linux
+        run: ./dist_linux/main_linux_amd64
+      - name: Download the macos binaries
+        uses: actions/download-artifact@v3
+        with:
+          name: macos-binaries
+          path: ./dist_macos/
+      - name: fixe file permissions
+        run: chmod +x ./dist_macos/*
+      - name: Run the pre built code from macos
+        run: ./dist_macos/main_darwin_amd64
