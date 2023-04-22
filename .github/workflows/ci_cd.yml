@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+
+  build-on-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20
+      - uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Install dependencies
+        run: go mod tidy
+      - name: build all versions
+        run: make build
+      - name: Upload linux binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-binaries
+          path: ./dist/
+
+  build-on-macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20
+      - uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Install dependencies
+        run: go mod tidy
+      - name: build all versions
+        run: make build
+      - name: Upload macos binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: macos-binaries
+          path: ./dist/
