@@ -78,10 +78,8 @@ jobs:
       - name: check timezone
         run: date && date -u
       - uses: actions/checkout@v3
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: "1.20"
+      - name: Install dependencies
+        run: go mod tidy
       - name: Run the code directly
         run: go run main.go
       - name: Download the linux binaries
