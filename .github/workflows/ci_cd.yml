@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Asia/Singapore"
+          timezoneMacos: "Asia/Singapore"
+          timezoneWindows: "Singapore Standard Time"
       - uses: actions/checkout@v3
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -19,15 +24,52 @@ jobs:
       - name: build all versions
         run: make build
       - name: Upload linux binaries
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: linux-binaries
           path: ./dist/
+      - name: Run the code directly
+        run: go run main.go
+      - name: Run built code
+        run: ./dist/main_local
+
+  docker-on-linux:
+    runs-on: ubuntu-latest
+    container: golang:1.20.3-bullseye
+    needs:
+      - build-on-linux
+
+    steps:
+      - uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Asia/Singapore"
+          timezoneMacos: "Asia/Singapore"
+          timezoneWindows: "Singapore Standard Time"
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.20"
+      - name: Run the code directly
+        run: go run main.go
+      - name: Download plugin backend
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-binaries
+          path: ./dist/
+      - name: Run the pre built code
+        run: ./dist/main_linux_amd64
+
 
   build-on-macos:
     runs-on: macos-latest
 
     steps:
+      - uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Asia/Singapore"
+          timezoneMacos: "Asia/Singapore"
+          timezoneWindows: "Singapore Standard Time"
       - uses: actions/checkout@v3
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -38,7 +80,40 @@ jobs:
       - name: build all versions
         run: make build
       - name: Upload macos binaries
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: macos-binaries
           path: ./dist/
+      - name: Run the code directly
+        run: go run main.go
+      - name: Run built code
+        run: ./dist/main_local
+
+  docker-on-macos:
+    runs-on: macos-latest
+    container: golang:1.20.3-bullseye
+    needs:
+      - build-on-macos
+
+    steps:
+      - uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Asia/Singapore"
+          timezoneMacos: "Asia/Singapore"
+          timezoneWindows: "Singapore Standard Time"
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.20"
+      - name: Run the code directly
+        run: go run main.go
+      - name: Download plugin backend
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-binaries
+          path: ./dist/
+      - name: Run the pre built code (darwin)
+        run: ./dist/main_darwin_amd64
+      - name: Run the pre built code (linux)
+        run: ./dist/main_linux_amd64
