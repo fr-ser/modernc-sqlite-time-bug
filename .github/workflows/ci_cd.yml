@@ -1,9 +1,7 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - "**"
+  - push
 
 jobs:
 
@@ -11,17 +9,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
           go-version: 1.20
-      - uses: actions/cache@v2
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
       - name: Install dependencies
         run: go mod tidy
       - name: build all versions
@@ -36,17 +28,11 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
           go-version: 1.20
-      - uses: actions/cache@v2
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
       - name: Install dependencies
         run: go mod tidy
       - name: build all versions
