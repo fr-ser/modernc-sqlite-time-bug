@@ -78,10 +78,6 @@ jobs:
       - name: check timezone
         run: date && date -u
       - uses: actions/checkout@v3
-      - name: Install dependencies
-        run: go mod tidy
-      - name: Run the code directly
-        run: go run main.go
       - name: Download the linux binaries
         uses: actions/download-artifact@v3
         with:
@@ -99,4 +95,8 @@ jobs:
       - name: fix file permissions
         run: chmod +x ./dist_macos/*
       - name: Run the pre built code from macos
-        run: ./dist_macos/main_darwin_amd64
+        run: ./dist_macos/main_linux_amd64
+      - name: Install dependencies
+        run: go mod tidy
+      - name: Run the code directly
+        run: go run main.go
