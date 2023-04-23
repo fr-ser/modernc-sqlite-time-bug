@@ -16,21 +16,21 @@ The code of this repo has been run via Github actions in Linux, MacOs and inside
 
 The results are the following:
 
-- Running directly in Linux: [All good](https://github.com/fr-ser/modernc-sqlite-time-bug/actions/runs/4772298815/jobs/8484723924)
+- Running directly in Linux: [All good - link to Github Actions](https://github.com/fr-ser/modernc-sqlite-time-bug/actions/runs/4772298815/jobs/8484723924)
 
     ```txt
     Run go run main.go
     UTC: 2023-04-22 02:33:39 - Local: 2023-04-22 18:33:39
     ```
 
-- Running directly in macOs: [All good](https://github.com/fr-ser/modernc-sqlite-time-bug/actions/runs/4772298815/jobs/8484723835)
+- Running directly in macOs: [All good - link to Github Actions](https://github.com/fr-ser/modernc-sqlite-time-bug/actions/runs/4772298815/jobs/8484723835)
 
     ```txt
     Run go run main.go
     UTC: 2023-04-22 02:34:48 - Local: 2023-04-22 18:34:48
     ```
 
-- Running in docker: [Oh no...](https://github.com/fr-ser/modernc-sqlite-time-bug/actions/runs/4772298815/jobs/8484737308)
+- Running in docker: [Oh no... - link to Github Actions](https://github.com/fr-ser/modernc-sqlite-time-bug/actions/runs/4772298815/jobs/8484737308)
 
     ```txt
     Run date && date -u
@@ -46,3 +46,5 @@ The results are the following:
 1. Install golang
 2. Run locally: `go run main.go` -> "UTC: 2023-04-22 08:39:16 - Local: 2023-04-22 12:39:16"
 3. Run in docker: `docker compose run linux-with-go sh -c "cd /app && go run main.go"` -> "UTC: 2023-04-22 10:40:53 - Local: 2023-04-22 10:40:53"
+
+    Depending on your version of docker compose you might need to run with a dash. I.e. `docker-compose run linux-with-go sh -c "cd /app && go run main.go"`
